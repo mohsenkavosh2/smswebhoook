@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: sms-webhook-proxy
+    env: python
+    region: singapore  # یا frankfurt, ohio, oregon
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: WEBHOOK_SECRET
+        generateValue: true  # Render به طور خودکار تولید می‌کند
+      - key: ALLOWED_NUMBERS
+        value: "+989121234567,+989123456789"  # شماره‌های خود را وارد کنید
+      - key: LOCAL_SERVER_URL
+        sync: false  # بعداً در پنل تنظیم خواهید کرد
+    healthCheckPath: /health
+    autoDeploy: true
